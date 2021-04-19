@@ -1,23 +1,31 @@
 package com._1irda.concurrency;
 
+import java.util.concurrent.Semaphore;
+
 public class Stick {
 
     private Philosopher owner;
 
-    public Stick() { }
+    private Semaphore semaphore;
+
+    public Stick() {
+        semaphore = new Semaphore(1);
+    }
 
     public synchronized void take(Philosopher newOwner) {
         if (isFree()) {
-            this.owner = newOwner;
+            owner = newOwner;
+            semaphore.tryAcquire();
         }
     }
 
     public synchronized void put() {
-        this.owner = null;
+        owner = null;
+        semaphore.release();
     }
 
     public synchronized boolean isFree() {
-        return this.owner == null;
+        return owner == null;
     }
 
     public Philosopher getOwner() {

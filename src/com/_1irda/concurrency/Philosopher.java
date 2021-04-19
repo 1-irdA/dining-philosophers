@@ -6,7 +6,7 @@ public class Philosopher extends Thread {
 
     private static final int RIGHT = 1;
 
-    private static final int FOOD_DURATION = 1000;
+    private static final int FOOD_DURATION = 2000;
 
     private final String name;
 

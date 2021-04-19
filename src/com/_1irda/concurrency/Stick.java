@@ -6,7 +6,7 @@ public class Stick {
 
     private Philosopher owner;
 
-    private Semaphore semaphore;
+    private final Semaphore semaphore;
 
     public Stick() {
         semaphore = new Semaphore(1);

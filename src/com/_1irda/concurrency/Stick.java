@@ -6,22 +6,14 @@ public class Stick {
 
     private Philosopher owner;
 
-    private final Semaphore semaphore;
-
-    public Stick() {
-        semaphore = new Semaphore(1);
-    }
-
     public synchronized void take(Philosopher newOwner) {
         if (isFree()) {
             owner = newOwner;
-            semaphore.tryAcquire();
         }
     }
 
     public synchronized void put() {
         owner = null;
-        semaphore.release();
     }
 
     public synchronized boolean isFree() {

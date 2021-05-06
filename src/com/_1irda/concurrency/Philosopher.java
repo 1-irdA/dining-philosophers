@@ -6,9 +6,11 @@ public class Philosopher extends Thread {
 
     private static final int RIGHT = 1;
 
-    private static final int FOOD_DURATION = 2000;
+    private static final int FOOD_DURATION = 1000;
 
     private final String name;
+
+    private boolean isRightHanded;
 
     private final Stick[] sticks;
 
@@ -18,11 +20,11 @@ public class Philosopher extends Thread {
 
     public enum State {
 
-        THINK(10),
+        THINK(2),
 
         HUNGRY(0),
 
-        EAT(5);
+        EAT(1);
 
         private final int duration;
 
@@ -51,8 +53,9 @@ public class Philosopher extends Thread {
         }
     }
 
-    public Philosopher(String name, Stick left, Stick right) {
+    public Philosopher(String name, boolean rightHanded, Stick left, Stick right) {
         this.name = name;
+        isRightHanded = rightHanded;
         sticks = new Stick[]{left, right};
         currentState = State.THINK;
     }
@@ -62,11 +65,26 @@ public class Philosopher extends Thread {
     }
 
     private void hungry() {
+        Stick s1 = isRightHanded ? sticks[RIGHT] : sticks[LEFT];
+        Stick s2 = isRightHanded ? sticks[LEFT] : sticks[RIGHT];
         while (!isOwner()) {
-            if (sticks[LEFT].isFree()) {
-                sticks[LEFT].take(this);
-            } else if (sticks[RIGHT].isFree()) {
-                sticks[RIGHT].take(this);
+            if (s1.isFree()) {
+                s1.take(this);
+                if (s2.isFree()) {
+                    s2.take(this);
+                }
+            } else if (s2.isFree()) {
+                s2.take(this);
+                if (s1.isFree()) {
+                    s1.take(this);
+                }
+            }
+            if (!isOwner()) {
+                if (s1.getOwner() == this) {
+                    s1.put();
+                } else if (s2.getOwner() == this) {
+                    s2.put();
+                }
             }
         }
     }
@@ -87,6 +105,10 @@ public class Philosopher extends Thread {
 
     private boolean isOwner() {
         return sticks[LEFT].getOwner() == this && sticks[RIGHT].getOwner() == this;
+    }
+
+    public void setRightHanded(boolean rightHanded) {
+        isRightHanded = rightHanded;
     }
 
     @Override

@@ -17,8 +17,10 @@ public class Diner {
 
         IntStream.range(0, nbPhilosophers).forEach(i ->
                 philosophers.add(new Philosopher("Philosopher " + i,
+                                true,
                                 sticks.get(i),
                                 sticks.get((i + 1) % nbPhilosophers))));
+        philosophers.get(philosophers.size() / 2).setRightHanded(false);
     }
 
     public void launch() {

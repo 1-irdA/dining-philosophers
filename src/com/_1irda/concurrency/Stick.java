@@ -12,7 +12,10 @@ public class Stick {
         }
     }
 
-    public synchronized void put() {
+    public synchronized void put(Philosopher currentOwner) {
+        if (getOwner() != currentOwner) {
+            throw new IllegalStateException("Current owner is not the stick owner");
+        }
         owner = null;
     }
 

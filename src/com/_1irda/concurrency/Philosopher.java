@@ -81,9 +81,9 @@ public class Philosopher extends Thread {
             }
             if (!isOwner()) {
                 if (s1.getOwner() == this) {
-                    s1.put();
+                    s1.put(this);
                 } else if (s2.getOwner() == this) {
-                    s2.put();
+                    s2.put(this);
                 }
             }
         }
@@ -99,8 +99,8 @@ public class Philosopher extends Thread {
     }
 
     private void putSticks() {
-        sticks[LEFT].put();
-        sticks[RIGHT].put();
+        sticks[LEFT].put(this);
+        sticks[RIGHT].put(this);
     }
 
     private boolean isOwner() {
